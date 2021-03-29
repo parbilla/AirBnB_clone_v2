@@ -10,6 +10,7 @@ from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
+import re
 
 
 class HBNBCommand(cmd.Cmd):
@@ -131,15 +132,24 @@ class HBNBCommand(cmd.Cmd):
             if i == 0:
                 continue
             temp = []
-            #if '=' in argv:
+            #if '=' in commands:
             temp = commands[i].split('=')
-            setters[temp[0]] = temp[1].replace("_", " ")
-        print(setters)
-            
-        """new_instance = HBNBCommand.classes[args]()
+            if temp[1][0] == "\"":
+                setters[temp[0]] = temp[1].replace("_", " ").strip('"')
+                continue
+            dot = re.compile('[.]')
+            if dot.search(temp[1]):
+                setters[temp[0]] = float(temp[1])
+                continue
+            else:
+                setters[temp[0]] = int(temp[1])
+    
+        new_instance = HBNBCommand.classes[commands[0]]()
+        for key, value in setters.items():
+            setattr(new_instance, key, value)
         storage.save()
         print(new_instance.id)
-        storage.save()"""
+        storage.save()
 
     def help_create(self):
         """ Help information for the create method """
