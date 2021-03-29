@@ -124,15 +124,11 @@ class HBNBCommand(cmd.Cmd):
         if commands[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        
-        # class_name = ""
-
         # Loop over args
         for (i, _) in enumerate(commands):
             if i == 0:
                 continue
             temp = []
-            #if '=' in commands:
             temp = commands[i].split('=')
             if temp[1][0] == "\"":
                 setters[temp[0]] = temp[1].replace("_", " ").strip('"')
@@ -143,7 +139,6 @@ class HBNBCommand(cmd.Cmd):
                 continue
             else:
                 setters[temp[0]] = int(temp[1])
-    
         new_instance = HBNBCommand.classes[commands[0]]()
         for key, value in setters.items():
             setattr(new_instance, key, value)
