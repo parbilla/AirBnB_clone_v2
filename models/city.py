@@ -1,9 +1,11 @@
 #!/usr/bin/python3
 """City Class"""
 import os
+import models
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, Integer, String, Float, ForeignKey
 from sqlalchemy.orm import relationship
+
 storage_type = os.environ.get('HBNB_TYPE_STORAGE')
 
 
