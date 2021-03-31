@@ -16,7 +16,7 @@ import re
 
 
 class HBNBCommand(cmd.Cmd):
-    """ Contains the functionality for the HBNB console"""
+    """Contains the functionality for the HBNB console"""
 
     # determines prompt for interactive/non-interactive modes
     prompt = '(hbnb) ' if sys.__stdin__.isatty() else ''
@@ -118,35 +118,30 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
-        if not args:
+        try:
+            if not arg:
+                raise SyntaxError()
+            my_list = arg.split(" ")
+            obj = eval("{}()".format(my_list[0]))
+            if len(arg) > 1:
+                my_dict = dict(element.split('=') for element in my_list[1:])
+                for key, value in my_dict.items():
+                    if hasattr(obj, key):
+                        if value[0] == "\"" and value[-1] == "\"":
+                            value = value[1:-1]
+                        if '_' in value:
+                            value = value.replace('_', ' ')
+                        try:
+                            value = eval(value)
+                        except Exception:
+                            pass
+                        setattr(obj, key, value)
+            obj.save()
+            print("{}".format(obj.id))
+        except SyntaxError:
             print("** class name missing **")
-            return
-        commands = args.split(' ')
-        setters = {}
-        if commands[0] not in HBNBCommand.classes:
+        except NameError:
             print("** class doesn't exist **")
-            return
-        # Loop over args
-        for (i, _) in enumerate(commands):
-            if i == 0:
-                continue
-            temp = []
-            temp = commands[i].split('=')
-            if temp[1][0] == "\"":
-                setters[temp[0]] = temp[1].replace("_", " ").strip('"')
-                continue
-            dot = re.compile('[.]')
-            if dot.search(temp[1]):
-                setters[temp[0]] = float(temp[1])
-                continue
-            else:
-                setters[temp[0]] = int(temp[1])
-        new_instance = HBNBCommand.classes[commands[0]]()
-        for key, value in setters.items():
-            setattr(new_instance, key, value)
-        storage.save()
-        print(new_instance.id)
-        storage.save()
 
     def help_create(self):
         """ Help information for the create method """
