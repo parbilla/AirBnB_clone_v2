@@ -15,7 +15,7 @@ if storage_type == "db":
     metadata = Base.metadata
     place_amenity = Table('place_amenity', metadata,
                           Column('place_id', String(60), primary_key=True,
-                                 ForeignKey('places.id'), nullalbe=False),
+                                 ForeignKey('places.id'), nullable=False),
                           Column('amenity_id', String(60), primary_key=True,
                                  ForeignKey('amenities.id'), nullable=False))
 
