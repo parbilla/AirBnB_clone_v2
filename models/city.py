@@ -1,21 +1,19 @@
 #!/usr/bin/python3
-"""City Class"""
+"""This is the city class"""
 import os
-import models
+from sqlalchemy import Column, Integer, String, ForeignKey
 from models.base_model import BaseModel, Base
-from sqlalchemy import Column, Integer, String, Float, ForeignKey
 from sqlalchemy.orm import relationship
-
-storage_type = os.environ.get('HBNB_TYPE_STORAGE')
 
 
 class City(BaseModel, Base):
-    """Defines City Class"""
-    if storage_type == "db":
-        __tablename__ = "cities"
-        name = Column(String(128), nullable=False)
-        state_id = Column(String(60), ForeignKey(states.id), nullable=False,)
-        places = relationship('Place', backref='cities', cascade='delete')
-    else:
-        state_id = ''
-        name = ''
+    """This is the class for City
+    Attributes:
+        state_id: The state id
+        name: input name
+    """
+    __tablename__ = "cities"
+    name = Column(String(128), nullable=False)
+    state_id = Column(String(60), ForeignKey("states.id"), nullable=False)
+    places = relationship("Place", backref="cities",
+                          cascade="all, delete-orphan")

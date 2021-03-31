@@ -1,31 +1,30 @@
 #!/usr/bin/python3
-"""State Class"""
+"""This is the state class"""
 import os
-import models
-from models.base_model import BaseModel, Base
-from models.city import City
 from sqlalchemy import Column, Integer, String, ForeignKey
+from models.base_model import BaseModel, Base
 from sqlalchemy.orm import relationship
-
-storage_type = os.environ.get('HBNB_TYPE_STORAGE')
+from models.city import City
 
 
 class State(BaseModel, Base):
-    """Defines State Class"""
-    if storage_type == "db":
-        __tablename__ = "states"
-        name = Column(String(128), nullable=False)
-        cities = relationship("City", backref="state",
-                              cascade="delete")
-    else:
-        name = ''
+    """This is the class for State
+    Attributes:
+        name: input name
+    """
+    __tablename__ = "states"
 
+    name = Column(String(128), nullable=False)
+    cities = relationship("City", backref="state",
+                          cascade="all, delete-orphan")
+
+    if os.getenv("HBNB_TYPE_STORAGE") == "fs":
         @property
         def cities(self):
-            """Getter attribute that returns the list of City instances
-            of the current State"""
-            city_list = []
-            for city in models.storage.all('City').values():
-                if city.state.id == self.id:
-                    city_list.append(city)
-            return city_list
+            """ Returns list of City instance with equal state_id """
+            from models import storage
+            my_list = []
+            for city in storage.all("City").values():
+                if city.state_id == self.id:
+                    my_list.append(city)
+            return my_list
