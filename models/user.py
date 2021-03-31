@@ -1,25 +1,32 @@
 #!/usr/bin/python3
-"""User Class"""
+"""This is the user class"""
 import os
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 
-storage_type = os.environ.get('HBNB_TYPE_STORAGE')
-
 
 class User(BaseModel, Base):
-    """Defines User Class"""
-    if storage_type == "db":
-        __tablename__ = 'users'
+    """This is the class for user
+    Attributes:
+        email: email address
+        password: password for you login
+        first_name: first name
+        last_name: last name
+    """
+    __tablename__ = "users"
+
+    if os.getenv("HBNB_TYPE_STORAGE") == "db":
         email = Column(String(128), nullable=False)
         password = Column(String(128), nullable=False)
         first_name = Column(String(128), nullable=True)
         last_name = Column(String(128), nullable=True)
-        places = relationship('Place', backref='user', cascade='delete')
-        reviews = relationship('Review', backref='user', cascade='delete')
+        places = relationship("Place", backref="user",
+                              cascade="all, delete-orphan")
+        reviews = relationship("Review", backref="user",
+                               cascade="all, delete-orphan")
     else:
-        email = ''
-        password = ''
-        first_name = ''
-        last_name = ''
+        email = ""
+        password = ""
+        first_name = ""
+        last_name = ""
