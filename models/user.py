@@ -5,6 +5,8 @@ from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 
+storage_type = os.environ.get('HBNB_TYPE_STORAGE')
+
 
 class User(BaseModel, Base):
     """Defines User Class"""
