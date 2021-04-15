@@ -12,18 +12,30 @@ def do_deploy(archive_path):
     """Function to distribute archives"""
     if not (path.exists(archive_path)):
         return False
-    try:
-        put(archive_path, "/tmp/")
+        result = put(archive_path, "/tmp/")
+        if result.failed:
+            return False
         name = (archive_path.split('/')[1]).split('.')[0]
-        run("mkdir -p /data/web_static/releases/{}".format(name))
-        run("tar -xzf /tmp/{}.tgz -C /data/web_static/releases/{}"
-            .format(name, name))
-        run("rm /tmp/{}.tgz".format(name))
-        run("mv /data/web_static/releases/{}/web_static/* \
+        result = run("mkdir -p /data/web_static/releases/{}".format(name))
+        if result.failed:
+            return False
+        result = run("tar -xzf /tmp/{}.tgz -C /data/web_static/releases/{}"
+                     .format(name, name))
+        if result.failed:
+            return False
+        result = run("rm /tmp/{}.tgz".format(name))
+        if result.failed:
+            return False
+        result = run("mv /data/web_static/releases/{}/web_static/* \
         /data/web_static/releases/{}/".format(name, name))
-        run("rm -rf /data/web_static/releases/{}/web_static".format(name))
-        run("ln -sf /data/web_static/releases/{}/ /data/web_static/current"
-            .format(name))
+        if result.failed:
+            return False
+        result = run("rm -rf /data/web_static/releases/{}/web_static"
+                     .format(name))
+        if result.failed:
+            return False
+        result = run("ln - sf / data/web_static/releases/{}\
+                     /data/web_static/current".format(name))
+        if result.failed:
+            return False
         return True
-    except:
-        return False
