@@ -2,11 +2,8 @@
 # Bash script that sets up your web servers for the deployment of web_static
 
 # Install Nginx if it not already installed
-if [[ $(dpkg -s nginx 2>/dev/null | grep -c "ok installed") -eq 0 ]]; then
 apt-get update
-apt-get upgrade
 apt-get -y install nginx
-fi
 # Create the folder /data/ if it doesnt already exist
 mkdir -p /data
 # Create the folder /data/web_static/ if it doesnt already exist
