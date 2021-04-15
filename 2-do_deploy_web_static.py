@@ -1,11 +1,11 @@
 #!/usr/bin/python3
 """Script that distributes an archive to your web servers,
  using the function do_deploy"""
-import fabric.api
-import os
+from fabric.api import run, env, put
+from os import path
 
 env.hosts = ['35.229.57.233', '34.75.232.226']
-env.user = ubuntu
+env.user = 'ubuntu'
 
 
 def do_deploy(archive_path):
@@ -14,9 +14,9 @@ def do_deploy(archive_path):
         return False
     try:
         put(archive_path, "/tmp/")
-        name = (archive_path.split('/')[1]).split(.)[0]
+        name = (archive_path.split('/')[1]).split('.')[0]
         run("mkdir -p /data/web_static/releases/{}".format(name))
-        run("tar -xvzf /tmp/{}.tgz -C /home/data/web_static/releases/{}"
+        run("tar -xzf /tmp/{}.tgz -C /data/web_static/releases/{}"
             .format(name, name))
         run("rm /tmp/{}.tgz".format(name))
         run("mv /data/web_static/releases/{}/web_static/* \
