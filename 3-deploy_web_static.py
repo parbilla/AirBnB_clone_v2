@@ -1,13 +1,15 @@
 #!/usr/bin/python3
 """Script that creates and distributes an archive to your web servers,
  using the function deploys"""
+
+
 from fabric.api import *
 from os import path
 from datetime import datetime
 from os.path import isdir
 
 
-env.hosts = ['34.75.78.32', '34.73.48.61']
+env.hosts = ['35.229.57.233', '34.75.232.226']
 
 
 def do_pack():
