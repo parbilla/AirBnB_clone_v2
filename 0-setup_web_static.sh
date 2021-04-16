@@ -5,11 +5,8 @@
 apt-get update
 apt-get -y install nginx
 # Create the folder /data/ if it doesnt already exist
-mkdir -p /data
 # Create the folder /data/web_static/ if it doesnt already exist
-mkdir -p /data/web_static
 # Create the folder /data/web_static/releases/ if it doesnt already exist
-mkdir -p /data/web_static/releases
 # Create the folder /data/web_static/shared/ if it doesnt already exist
 mkdir -p /data/web_static/shared
 # Create the folder /data/web_static/releases/test/ if it doesnt already exist
@@ -27,6 +24,6 @@ ln -sf /data/web_static/releases/test /data/web_static/current
 # Give ownership of the /data/ folder to the ubuntu user AND group (you can assume this user and group exist). This should be recursive; everything inside should be created/owned by this user/group.
 sudo chown -R ubuntu:ubuntu /data/
 # Update the Nginx configuration to serve the content of /data/web_static/current/ to hbnb_static (ex: https://mydomainname.tech/hbnb_static). Dont forget to restart Nginx after updating the configuration using alias inside your Nginx configuration
-new_string="\\\n\tlocation /hbnb_static {\n\t\talias /data/web_static/currrent/;\n\t}\n"
+new_string="\\\n\tlocation /hbnb_static {\n\t\talias /data/web_static/current/;\n}\n"
 sed -i "/server_name _/a $new_string" /etc/nginx/sites-available/default
 service nginx restart
