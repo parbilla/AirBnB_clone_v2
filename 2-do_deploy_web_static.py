@@ -1,41 +1,42 @@
 #!/usr/bin/python3
 """Script that distributes an archive to your web servers,
  using the function do_deploy"""
-from fabric.api import run, env, put
+from fabric.api import *
 from os import path
+from datetime import datetime
 
-env.hosts = ['35.229.57.233', '34.75.232.226']
-env.user = 'ubuntu'
+
+env.hosts = ['34.75.78.32', '34.73.48.61']
 
 
 def do_deploy(archive_path):
-    """Function to distribute archives"""
-    if not (path.exists(archive_path)):
-        return False
-        result = put(archive_path, "/tmp/")
-        if result.failed:
+    """Function that decompress and deploy functions in the serv"""
+    if path.exists(archive_path):
+        absFilePath = path.abspath(archive_path)
+        filepath, filename = path.split(absFilePath)
+        local = "{}".format(archive_path)
+        dest = "/tmp/{}".format(filename)
+        if put(local, dest).failed:
             return False
-        name = (archive_path.split('/')[1]).split('.')[0]
-        result = run("mkdir -p /data/web_static/releases/{}".format(name))
-        if result.failed:
+        folder = filename[:-4]
+        releases = "/data/web_static/releases"
+        if run('mkdir -p {}/{}'.format(releases, folder)).failed:
             return False
-        result = run("tar -xzf /tmp/{}.tgz -C /data/web_static/releases/{}"
-                     .format(name, name))
-        if result.failed:
+        if run('tar -xzf /tmp/{} -C {}/{}'.
+               format(filename, releases, folder)).failed:
             return False
-        result = run("rm /tmp/{}.tgz".format(name))
-        if result.failed:
+        if run('rm /tmp/{}'.format(filename)).failed:
             return False
-        result = run("mv /data/web_static/releases/{}/web_static/* \
-        /data/web_static/releases/{}/".format(name, name))
-        if result.failed:
+        if run('mv {}/{}/web_static/* {}/{}/'.
+               format(releases, folder, releases, folder)).failed:
             return False
-        result = run("rm -rf /data/web_static/releases/{}/web_static"
-                     .format(name))
-        if result.failed:
+        if run('rm -rf {}/web_static'.format(releases)).failed:
             return False
-        result = run("ln - sf / data/web_static/releases/{}\
-                     /data/web_static/current".format(name))
-        if result.failed:
+        if run('rm -rf /data/web_static/current').failed:
+            return False
+        if run('ln -s {}/{}/ /data/web_static/current'.
+               format(releases, folder)).failed:
             return False
         return True
+    else:
+        return False
