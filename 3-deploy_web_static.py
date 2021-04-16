@@ -55,6 +55,7 @@ def do_deploy(archive_path):
     else:
         return False
 
+
 def deploy():
     """Deploy new version in the Server"""
     filepath = do_pack()
