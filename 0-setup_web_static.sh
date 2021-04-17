@@ -2,7 +2,7 @@
 # Bash script that sets up your web servers for the deployment of web_static
 
 IsNginx=$(which nginx)
-if [ -z $IsNginx ]; then
+if [ -z "$IsNginx" ]; then
     sudo apt-get update
     sudo apt-get upgrade
     sudo apt-get -y install nginx
