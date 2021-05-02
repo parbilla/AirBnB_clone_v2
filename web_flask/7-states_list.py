@@ -14,7 +14,7 @@ def remove_Alchemy():
     storage.close()
 
 
-@app.route('/staes_list', strict_slashes=False)
+@app.route('/states_list', strict_slashes=False)
 def states_list():
     """Display a HTML with the list of states"""
     states = storage.all(State).values()
