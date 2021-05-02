@@ -14,6 +14,7 @@ def states_list():
     states = storage.all(State).values()
     return render_template('7-states_list.html', states=states)
 
+
 @app.teardown_appcontext
 def remove_Alchemy(exception):
     """Remove the current SQLAlchemy Session"""
