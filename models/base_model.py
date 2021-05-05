@@ -2,9 +2,10 @@
 """This is the base model class for AirBnB"""
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, DateTime
+from datetime import datetime
 import uuid
 import models
-from datetime import datetime
+import os
 
 Base = declarative_base()
 
